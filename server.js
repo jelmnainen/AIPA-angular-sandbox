@@ -1,11 +1,12 @@
 var express = require('express');
 var app = express();
 var mongoose = require('mongoose');
+var database = require('./config/database')
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 
-mongoose.connect('mongodb://localhost:27017/');
+mongoose.connect(database.url);
 
 app.use(express.static(__dirname + '/public'));
 app.use(morgan('dev'));
