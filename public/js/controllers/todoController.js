@@ -52,12 +52,12 @@ angular.module('todoController', [])
     $scope.deleteTodo = function(id){
       Todos.delete(id)
         .success(function(data){
-          $scope.todos = data;
+          $scope.completedTodos.push(data);
         });
     };
 
     $scope.completeTodo = function(todo){
-      if(Todos.complete(todo)){
+      if(Todos.completeTodo(todo)){
         moveTodoToCompleted(todo);
       }
     };
