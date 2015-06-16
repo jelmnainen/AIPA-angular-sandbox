@@ -19,10 +19,11 @@ angular.module('todoController', [])
       });
     };
 
-    var moveTodoToCompleted = function(todo){
-      $scope.completedTodos.push(todo);
+    function moveTodoToCompleted(newEntry, oldEntry){
+      $scope.completedTodos.push(newEntry);
       $scope.incompletedTodos.splice(
-        $scope.incompletedTodos.indexOf(todo), 1
+        $scope.incompletedTodos.indexOf(oldEntry),
+        1
       );
     }
 
@@ -44,7 +45,7 @@ angular.module('todoController', [])
         Todos.create($scope.formData)
           .success(function(data){
             $scope.formData = {};
-            $scope.incompletedTodos = data;
+            $scope.incompletedTodos.push(data);
           });
       }
     };
@@ -52,14 +53,15 @@ angular.module('todoController', [])
     $scope.deleteTodo = function(id){
       Todos.delete(id)
         .success(function(data){
-          $scope.completedTodos.push(data);
+          $scope.completedTodos = data;
         });
     };
 
     $scope.completeTodo = function(todo){
-      if(Todos.completeTodo(todo)){
-        moveTodoToCompleted(todo);
-      }
+      Todos.completeTodo(todo)
+        .success(function(data){
+          moveTodoToCompleted(data, todo);
+        });
     };
 
   });

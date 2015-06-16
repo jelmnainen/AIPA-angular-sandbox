@@ -41,7 +41,8 @@ module.exports = function(app){
         if (err){
             res.send(err);
         } else {
-          res.send(todo);
+          console.log(todo);
+          res.json(todo);
         }
     });
 
@@ -54,14 +55,16 @@ module.exports = function(app){
       }, function(err, todo) {
           if (err){
               res.send(err);
-          }
-          // get and return all the todos after you create another
-          Todo.find(function(err, todos) {
-              if (err){
-                  res.send(err);
-                }
+          } else {
+
+            Todo.find({'done': true}, function(err, todos){
+              if(err){
+                res.send(err);
+              }
               res.json(todos);
-          });
+            })
+
+          }
       });
   });
 
@@ -75,7 +78,12 @@ module.exports = function(app){
         if(err){
           res.send(err);
         } else {
-          res.send(Todo.findById(id));
+          Todo.findById(id, function(err, data){
+            if(err){
+              res.send(err);
+            }
+            res.json(data);
+          });
         }
       }
     );

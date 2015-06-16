@@ -20,4 +20,4 @@ angular.module('todoService', [])
         return $http.post('/api/todos/complete/' + todo._id);
       }
     }
-  })
+  });
