@@ -57,9 +57,9 @@ angular.module('todoController', [])
     };
 
     $scope.completeTodo = function(todo){
-      console.log(todo);
-      Todos.complete(todo).success(moveTodoToCompleted(todo));
+      if(Todos.complete(todo)){
+        moveTodoToCompleted(todo);
+      }
     };
-
 
   });

@@ -74,8 +74,20 @@ module.exports = function(app){
   });
 
   app.post('/api/todos/complete/:todo_id', function(req, res){
-    Todo.update({'id' : req.params._id}, {'done' : true})
-  })
+    var id = req.params.todo_id;
+
+    Todo.findByIdAndUpdate(
+      id,
+      { $set: {done: true}},
+      function(err, query){
+        if(err){
+          res.send(err);
+        } else {
+          res.send(Todo.findById(id));
+        }
+      }
+    );
+  });
 
   app.get('*', function(req, res){
     res.sendfile('./public/index.html');
