@@ -2,11 +2,47 @@ angular.module('todoController', [])
 
   .controller('mainController', function($scope, $http, Todos){
     $scope.formData = {};
+    $scope.completedTodos = {};
+    $scope.incompletedTodos = {};
+
+
+    var getCompleted = function(){
+      Todos.getCompleted().success(function(data){
+        $scope.completedTodos = data;
+      });
+    };
+
+
+    var getIncompleted = function(){
+      Todos.getIncompleted().success(function(data){
+        $scope.incompletedTodos = data;
+      });
+    };
+
+    var updateAllTodos = function(){
+      this.getIncompleted();
+      this.getCompleted();
+    };
+
+    var moveTodoToCompleted = function(todo){
+      $scope.completedTodos.push(todo);
+      $scope.incompletedTodos.splice(
+        $scope.incompletedTodos.indexOf(todo), 1
+      );
+    }
 
     Todos.get()
       .success(function(data){
         $scope.todos = data;
       });
+
+    Todos.getCompleted().success(function(data){
+      $scope.completedTodos = data;
+    });
+
+    Todos.getIncompleted().success(function(data){
+      $scope.incompletedTodos = data;
+    });
 
     $scope.createTodo = function(){
       if(!$.isEmptyObject($scope.formData)){
@@ -25,5 +61,10 @@ angular.module('todoController', [])
         });
     };
 
+    $scope.completeTodo = function(todo){
+      console.log(todo);
+      Todos.complete(todo).success(moveTodoToCompleted(todo));
+    };
 
-  })
+
+  });

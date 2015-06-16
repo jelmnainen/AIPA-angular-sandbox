@@ -29,18 +29,43 @@
 
         <!-- HEADER AND TODO COUNT -->
         <div class="jumbotron text-center">
-            <h1>&quot;Work work&quot; -Peon<span class="label label-info">{{ todos.length }}</span></h1>
+            <h1>&quot;Work work&quot; -Peon<span class="label label-info">{{ completedTodos.length + "/" + incompletedTodos.length }}</span></h1>
         </div>
 
         <!-- TODO LIST -->
         <div id="todo-list" class="row">
             <div class="col-sm-4 col-sm-offset-4">
-
-                <!-- LOOP OVER THE TODOS IN $scope.todos -->
-                <div class="checkbox" ng-repeat="todo in todos">
-                    <label>
-                        <input type="checkbox" ng-click="deleteTodo(todo._id)"> {{ todo.text }}
-                    </label>
+                <div id="incompletedTodos">
+                  <p class="text-center" ng-hide="incompletedTodos.length > 0">&quot;Ready to work&quot;</p>
+                  <table class="table table-striped" ng-show="incompletedTodos.length > 0">
+                    <thead>
+                      <tr>
+                        <td>Task</td>
+                        <td>Done</td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr ng-repeat="todo in incompletedTodos">
+                        <td>{{todo.text}}</td>
+                        <td><input type="checkbox" ng-click="completeTodo(todo)"></td>
+                      </tr>
+                  </table>
+                </div>
+                <div id="completedTodos">
+                  <p class="text-center" ng-hide="completedTodos.length > 0"> No completed todos!</p>
+                  <table class="table" ng-show="completedTodos.length > 0">
+                    <thead>
+                      <tr>
+                        <td>Task</td>
+                        <td>Delete</td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr ng-repeat="todo in completedTodos">
+                        <td>{{todo.text}}</td>
+                        <td><input type="checkbox" ng-click="deleteTodo(todo._id)"></td>
+                      </tr>
+                  </table>
                 </div>
 
             </div>
