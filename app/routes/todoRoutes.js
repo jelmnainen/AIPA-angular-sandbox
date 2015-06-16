@@ -12,6 +12,26 @@ module.exports = function(app){
     });
   });
 
+  app.get('/api/todos/completed', function(req, res){
+    Todo.find({'done': true}, function(err, todos){
+      if(err){
+        res.send(err);
+      }
+      console.log(todos);
+      res.json(todos)
+    });
+  });
+
+  app.get('/api/todos/incompleted', function(req, res){
+    Todo.find({'done': false}, function(err, todos){
+      if(err){
+        res.send(err);
+      }
+      console.log(todos);
+      res.json(todos);
+    });
+  });
+
   // create todo and send back all todos after creation
   app.post('/api/todos', function(req, res) {
 
@@ -52,6 +72,10 @@ module.exports = function(app){
           });
       });
   });
+
+  app.post('/api/todos/complete/:todo_id', function(req, res){
+    Todo.update({'id' : req.params._id}, {'done' : true})
+  })
 
   app.get('*', function(req, res){
     res.sendfile('./public/index.html');
