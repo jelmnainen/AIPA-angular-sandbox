@@ -12,25 +12,38 @@ module.exports = function(app){
     });
   });
 
-  // create todo and send back all todos after creation
+  app.get('/api/todos/completed', function(req, res){
+    Todo.find({'done': true}, function(err, todos){
+      if(err){
+        res.send(err);
+      }
+      console.log(todos);
+      res.json(todos)
+    });
+  });
+
+  app.get('/api/todos/incompleted', function(req, res){
+    Todo.find({'done': false}, function(err, todos){
+      if(err){
+        res.send(err);
+      }
+      console.log(todos);
+      res.json(todos);
+    });
+  });
+
   app.post('/api/todos', function(req, res) {
 
-    // create a todo, information comes from AJAX request from Angular
     Todo.create({
         text : req.body.text,
         done : false
     }, function(err, todo) {
         if (err){
             res.send(err);
-          }
-
-        // get and return all the todos after you create another
-        Todo.find(function(err, todos) {
-            if (err){
-                res.send(err);
-            }
-            res.json(todos);
-        });
+        } else {
+          console.log(todo);
+          res.json(todo);
+        }
     });
 
   });
@@ -42,15 +55,38 @@ module.exports = function(app){
       }, function(err, todo) {
           if (err){
               res.send(err);
-          }
-          // get and return all the todos after you create another
-          Todo.find(function(err, todos) {
-              if (err){
-                  res.send(err);
-                }
+          } else {
+
+            Todo.find({'done': true}, function(err, todos){
+              if(err){
+                res.send(err);
+              }
               res.json(todos);
-          });
+            })
+
+          }
       });
+  });
+
+  app.post('/api/todos/complete/:todo_id', function(req, res){
+    var id = req.params.todo_id;
+
+    Todo.findByIdAndUpdate(
+      id,
+      { $set: {done: true}},
+      function(err, query){
+        if(err){
+          res.send(err);
+        } else {
+          Todo.findById(id, function(err, data){
+            if(err){
+              res.send(err);
+            }
+            res.json(data);
+          });
+        }
+      }
+    );
   });
 
   app.get('*', function(req, res){

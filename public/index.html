@@ -29,18 +29,43 @@
 
         <!-- HEADER AND TODO COUNT -->
         <div class="jumbotron text-center">
-            <h1>&quot;Work work&quot; -Peon<span class="label label-info">{{ todos.length }}</span></h1>
+            <h1>Todolist<span class="label label-info">{{ completedTodos.length + "/" + incompletedTodos.length }}</span></h1>
         </div>
 
         <!-- TODO LIST -->
         <div id="todo-list" class="row">
             <div class="col-sm-4 col-sm-offset-4">
-
-                <!-- LOOP OVER THE TODOS IN $scope.todos -->
-                <div class="checkbox" ng-repeat="todo in todos">
-                    <label>
-                        <input type="checkbox" ng-click="deleteTodo(todo._id)"> {{ todo.text }}
-                    </label>
+                <div id="incompletedTodos">
+                  <table class="table table-striped" ng-show="incompletedTodos.length > 0">
+                  <h3 class="text-center" ng-show="incompletedTodos.length > 0">Incomplete todos</h3>
+                    <thead>
+                      <tr>
+                        <td>Task</td>
+                        <td>Done</td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr ng-repeat="todo in incompletedTodos">
+                        <td>{{todo.text}}</td>
+                        <td><input type="checkbox" ng-click="completeTodo(todo)"></td>
+                      </tr>
+                  </table>
+                </div>
+                <div id="completedTodos">
+                  <h3 class="text-center" ng-show="completedTodos.length > 0">Completed todos</h3>
+                  <table class="table" ng-show="completedTodos.length > 0">
+                    <thead>
+                      <tr>
+                        <td>Task</td>
+                        <td>Delete</td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr ng-repeat="todo in completedTodos">
+                        <td>{{todo.text}}</td>
+                        <td><input type="checkbox" ng-click="deleteTodo(todo._id)"></td>
+                      </tr>
+                  </table>
                 </div>
 
             </div>
@@ -53,7 +78,7 @@
                     <div class="form-group">
 
                         <!-- BIND THIS VALUE TO formData.text IN ANGULAR -->
-                        <input type="text" class="form-control input-lg text-center" placeholder="&quot;Me not that kind of orc&quot; -Peon" ng-model="formData.text">
+                        <input type="text" class="form-control input-lg text-center" placeholder="&quot;Work work&quot; -Peon" ng-model="formData.text">
                     </div>
 
                     <!-- createToDo() WILL CREATE NEW TODOS -->
