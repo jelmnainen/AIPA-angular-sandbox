@@ -19,11 +19,6 @@ angular.module('todoController', [])
       });
     };
 
-    var updateAllTodos = function(){
-      this.getIncompleted();
-      this.getCompleted();
-    };
-
     var moveTodoToCompleted = function(todo){
       $scope.completedTodos.push(todo);
       $scope.incompletedTodos.splice(
