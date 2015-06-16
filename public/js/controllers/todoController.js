@@ -44,7 +44,7 @@ angular.module('todoController', [])
         Todos.create($scope.formData)
           .success(function(data){
             $scope.formData = {};
-            $scope.todos = data;
+            $scope.incompletedTodos = data;
           });
       }
     };
